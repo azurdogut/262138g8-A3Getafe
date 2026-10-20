@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.web.model.Cat;
 import com.web.repository.CatRepository;
 
+// Sort procede de Spring Data e indica por qué campos se ordena una consulta.
+import org.springframework.data.domain.Sort;
+
 // RequiredArgsConstructor procede de Lombok, que Maven ha descargado con el pom.xml.
 import lombok.RequiredArgsConstructor;
 
@@ -27,7 +30,7 @@ public class CatController {
 @GetMapping
   public List<Cat> listar() {
         // findAll() devuelve todas las filas de la tabla cat, sin ningún orden concreto.
-        return catRepository.findAll();
+        return catRepository.findAll(Sort.by("id"));
     }
 
   @PostMapping
