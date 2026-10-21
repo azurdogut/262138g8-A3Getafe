@@ -1,7 +1,30 @@
 package com.web.model;
 
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
+import java.time.LocalDateTime;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString
+
 public class AdoptionRequest {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String applicantName;
+    private String email;
+    private String message;
+    private LocalDateTime createdAt = LocalDateTime.now();
+    private String status = "PENDING";
+
+    @ManyToOne
+    private Cat cat;
 }

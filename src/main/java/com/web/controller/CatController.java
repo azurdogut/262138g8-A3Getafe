@@ -18,7 +18,7 @@ import org.springframework.data.domain.Sort;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/a3getafe")
+@RequestMapping("/api/cat")
   
 // @RequiredArgsConstructor escribe un constructor con un parámetro por cada campo final
 // (aquí, CatRepository). Es el constructor que antes escribíamos a mano.
