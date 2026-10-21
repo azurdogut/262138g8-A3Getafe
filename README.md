@@ -169,7 +169,7 @@ Método y endpoint Función
 
 #### Ejemplo ilustrativo de respuesta
 
-`GET /api/cats`
+`GET /api/cat/{1}`
 
     [
       {
@@ -193,8 +193,8 @@ Método y endpoint Función
 ### C. Cómo demostrar que ambas tecnologías funcionan
 
 1. Abrir la web y comprobar que Thymeleaf muestra los gatos guardados en PostgreSQL.
-2. Abrir `/api/cats` en el navegador o en Postman y observar los mismos gatos en JSON.
-3. Consultar `/api/cats/{id}` y comprobar que devuelve la ficha correspondiente.
+2. Abrir `/api/cat` en el navegador o en Postman y observar los mismos gatos en JSON.
+3. Consultar `/api/cat/{id}` y comprobar que devuelve la ficha correspondiente.
 4. Enviar el formulario de adopción y verificar que la solicitud queda almacenada.
 5. Consultar la base de datos para comprobar que la solicitud está vinculada al gato correcto.
 
@@ -266,13 +266,9 @@ Competencia             Evidencia en el proyecto
 
 * * *
 
-## ✅ Orden recomendado de trabajo
+## ✅ Pasos a seguir:
 
-1. Crear el proyecto y configurar Maven, Spring Boot y la conexión con PostgreSQL.
-2. Definir las entidades `Cat` y `AdoptionRequest` y su relación.
-3. Implementar el acceso a datos y los servicios básicos.
-4. Crear las páginas Thymeleaf: inicio, catálogo, ficha y formulario.
-5. Añadir validaciones y guardar solicitudes de adopción.
-6. Implementar y probar los dos endpoints de la API REST.
-7. Documentar el proyecto y subirlo a GitHub.
-8. Si queda tiempo, abordar las ampliaciones de Jenkins, Docker y Kubernetes.
+1. Añadir la contraseña de la base de datos a las variables de entorno de IntelliJ
+2. Para poder usar swagger abrir en el navegador la dirección: http://localhost:8080/swagger-ui/index.html
+
+
