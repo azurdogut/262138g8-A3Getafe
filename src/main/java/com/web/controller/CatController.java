@@ -5,6 +5,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,17 +31,48 @@ public class CatController {
   private final CatRepository catRepository;
 
 @GetMapping
-  public List<Cat> listar() {
-        // findAll() devuelve todas las filas de la tabla cat, sin ningún orden concreto.
+  public List<Cat> getAll() {
         return catRepository.findAll(Sort.by("id"));
+    }
+
+  @GetMapping("/{id}")
+    public ResponseEntity<Cat> getById(@PathVariable Long id) {
+        return catRepository.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public Cat crear(@RequestBody Cat cat) {
+  public Cat create(@Valid @RequestBody Cat cat) {
         // Anulamos el id recibido: save() inserta si el id es null y actualiza si existe,
         // y aquí queremos que siempre cree un gato nuevo.
         cat.setId(null);
         return catRepository.save(cat);
+    }
+
+  @PutMapping("/{id}")
+    public ResponseEntity<Cat> update(@PathVariable Long id, @RequestBody Cat catDetails) {
+        return catRepository.findById(id)
+                .map(cat -> {
+                    cat.setName(catDetails.getName());
+                    cat.setAgeDescription(catDetails.getAgeDescription());
+                    cat.setDescription(catDetails.getDescription());
+                    cat.setImageUrl(catDetails.getImageUrl());
+                    cat.setStatus(catDetails.getStatus());
+                    
+                    Cat updatedCat = catRepository.save(cat);
+                    return ResponseEntity.ok(updatedCat);
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        if (catRepository.existsById(id)) {
+            catRepository.deleteById(id);
+            return ResponseEntity.noContent().build(); // Devuelve código 204 No Content
+        }
+        return ResponseEntity.notFound().build();
     }
 }
