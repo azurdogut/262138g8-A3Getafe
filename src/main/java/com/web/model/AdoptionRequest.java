@@ -23,7 +23,7 @@ public class AdoptionRequest {
     private String email;
     private String message;
     private LocalDateTime createdAt = LocalDateTime.now();
-    private String status = "PENDINGss";
+    private String status = "PENDING";
 
     @ManyToOne
     private Cat cat;
