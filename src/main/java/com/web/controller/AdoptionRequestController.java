@@ -29,17 +29,48 @@ public class AdoptionRequestController {
     private final AdoptionRequestRepository adoptionRequestRepository;
 
     @GetMapping
-    public List<AdoptionRequest> listar() {
-        // findAll() devuelve todas las filas de la tabla cat, sin ningún orden concreto.
+    public List<AdoptionRequest> getAll() {
         return adoptionRequestRepository.findAll(Sort.by("id"));
+    }
+    
+  @GetMapping("/{id}")
+    public ResponseEntity<AdoptionRequest> getById(@PathVariable Long id) {
+        return adoptionRequestRepository.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public AdoptionRequest crear(@RequestBody AdoptionRequest adoptionRequest) {
+    public AdoptionRequest create(@RequestBody AdoptionRequest adoptionRequest) {
         // Anulamos el id recibido: save() inserta si el id es null y actualiza si existe,
         // y aquí queremos que siempre cree un gato nuevo.
         adoptionRequest.setId(null);
         return adoptionRequestRepository.save(adoptionRequest);
+    }
+    
+  @PutMapping("/{id}")
+    public ResponseEntity<AdoptionRequest> update(@PathVariable Long id, @RequestBody AdoptionRequest adoptionRequestDetails) {
+        return adoptionRequestRepository.findById(id)
+                .map(adoptionRequest -> {
+                    cat.setApplicantName(adoptionRequestDetails.getApplicantName());
+                    cat.setEmail(adoptionRequestDetails.getEmail());
+                    cat.setMessage(adoptionRequestDetails.getMessage());
+                    cat.setLocalDateTime(adoptionRequestDetails.getLocalDateTime());
+                    cat.setStatus(adoptionRequestDetails.getStatus());
+                    
+                    AdoptionRequest updatedAdoptionRequest = adoptionRequestRepository.save(adoptionRequest);
+                    return ResponseEntity.ok(updatedAdoptionRequest);
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        if (adoptionRequestRepository.existsById(id)) {
+            adoptionRequestRepository.deleteById(id);
+            return ResponseEntity.noContent().build(); // Devuelve código 204 No Content
+        }
+        return ResponseEntity.notFound().build();
     }
 }
