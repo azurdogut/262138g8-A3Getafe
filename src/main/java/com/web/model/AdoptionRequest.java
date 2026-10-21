@@ -27,4 +27,14 @@ public class AdoptionRequest {
 
     @ManyToOne
     private Cat cat;
+
+    public AdoptionRequest(String applicantName, String email, String message, LocalDateTime createdAt, String status, Cat cat) {
+        this.applicantName = applicantName;
+        this.email = email;
+        this.message = message;
+        this.createdAt = createdAt;
+        this.status = status;
+        this.cat = cat;
+    }
+
 }

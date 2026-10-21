@@ -11,8 +11,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @ToString // Siempre que no haya relación con otra tabla porque se puede generar un bucle infinito con una fk
-//@Builder
-// Permite crear objetos de forma muy limpia y legible sin preocuparte por el orden de los parámetros ni por el id
+
 public class Cat {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,5 +22,12 @@ public class Cat {
   private String description;
   private String imageUrl;
   private String status;
-  
+
+  public Cat(String name, String ageDescription, String description, String imageUrl, String status) {
+    this.name = name;
+    this.ageDescription = ageDescription;
+    this.description = description;
+    this.imageUrl = imageUrl;
+    this.status = status;
+  }
 }
