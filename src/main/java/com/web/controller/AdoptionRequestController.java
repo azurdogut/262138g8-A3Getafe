@@ -2,12 +2,8 @@ package com.web.controller;
 
 import java.util.List;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import com.web.model.AdoptionRequest;
 import com.web.repository.AdoptionRequestRepository;
@@ -53,11 +49,11 @@ public class AdoptionRequestController {
     public ResponseEntity<AdoptionRequest> update(@PathVariable Long id, @RequestBody AdoptionRequest adoptionRequestDetails) {
         return adoptionRequestRepository.findById(id)
                 .map(adoptionRequest -> {
-                    cat.setApplicantName(adoptionRequestDetails.getApplicantName());
-                    cat.setEmail(adoptionRequestDetails.getEmail());
-                    cat.setMessage(adoptionRequestDetails.getMessage());
-                    cat.setLocalDateTime(adoptionRequestDetails.getLocalDateTime());
-                    cat.setStatus(adoptionRequestDetails.getStatus());
+                    adoptionRequest.setApplicantName(adoptionRequestDetails.getApplicantName());
+                    adoptionRequest.setEmail(adoptionRequestDetails.getEmail());
+                    adoptionRequest.setMessage(adoptionRequestDetails.getMessage());
+                    adoptionRequest.setCreatedAt(adoptionRequestDetails.getCreatedAt());
+                    adoptionRequest.setStatus(adoptionRequestDetails.getStatus());
                     
                     AdoptionRequest updatedAdoptionRequest = adoptionRequestRepository.save(adoptionRequest);
                     return ResponseEntity.ok(updatedAdoptionRequest);
