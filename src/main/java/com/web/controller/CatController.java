@@ -22,15 +22,40 @@ import lombok.RequiredArgsConstructor;
 // (aquí, CatRepository). Es el constructor que antes escribíamos a mano.
 @RequiredArgsConstructor
   
-public class CatController {
+@Tag(name = "Gatos", description = "Endpoints para la gestión del catálogo de gatos en proceso de adopción")
+  public class CatController {
   private final CatRepository catRepository;
 
 @GetMapping
-  public List<Cat> getAll() {
-        return catRepository.findAll(Sort.by("id"));
+@Operation(summary = "Catálogo de gatos", description = "Devuelve todos los gatos: primero los que están esperando adopción y luego los adoptados")
+@ApiResponses(value = {
+    @ApiResponse(
+        responseCode = "200", 
+        description = "Lista de gatos obtenida correctamente (puede estar vacía)",
+        content = @Content(
+            mediaType = "application/json", 
+            array = @ArraySchema(schema = @Schema(implementation = Cat.class))
+        )
+    )
+})  
+    public List<Cat> getAll() {
+        return catRepository.findAll(Sort.by(Sort.Direction.ASC, "status"));
     }
 
   @GetMapping("/{id}")
+  @Operation(summary = "Obtener un gato por ID", description = "Busca y devuelve un gato específico a partir de su ID único")
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200", 
+            description = "Gato encontrado correctamente",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = Cat.class))
+        ),
+        @ApiResponse(
+            responseCode = "404", 
+            description = "Gato no encontrado con el ID proporcionado", 
+            content = @Content
+        )
+    })
     public ResponseEntity<Cat> getById(@PathVariable Long id) {
         return catRepository.findById(id)
                 .map(ResponseEntity::ok)
@@ -39,6 +64,19 @@ public class CatController {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
+  @Operation(summary = "Crear un nuevo gato", description = "Registra un nuevo gato en el sistema")
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "201", 
+            description = "Gato creado con éxito",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = Cat.class))
+        ),
+        @ApiResponse(
+            responseCode = "400", 
+            description = "Datos inválidos (falló la validación @Valid)", 
+            content = @Content
+        )
+    })
   public Cat create(@Valid @RequestBody Cat cat) {
         // Anulamos el id recibido: save() inserta si el id es null y actualiza si existe,
         // y aquí queremos que siempre cree un gato nuevo.
@@ -47,6 +85,19 @@ public class CatController {
     }
 
   @PutMapping("/{id}")
+  @Operation(summary = "Actualizar un gato", description = "Modifica los datos de un gato existente buscando por su ID")
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200", 
+            description = "Gato actualizado correctamente",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = Cat.class))
+        ),
+        @ApiResponse(
+            responseCode = "404", 
+            description = "Gato no encontrado para actualizar", 
+            content = @Content
+        )
+    })
     public ResponseEntity<Cat> update(@PathVariable Long id, @RequestBody Cat catDetails) {
         return catRepository.findById(id)
                 .map(cat -> {
@@ -63,6 +114,19 @@ public class CatController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Eliminar un gato", description = "Da de baja o elimina un gato del sistema por su ID")
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "204", 
+            description = "Gato eliminado correctamente (sin contenido)", 
+            content = @Content
+        ),
+        @ApiResponse(
+            responseCode = "404", 
+            description = "Gato no encontrado para eliminar", 
+            content = @Content
+        )
+    })
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         if (catRepository.existsById(id)) {
             catRepository.deleteById(id);
