@@ -10,7 +10,7 @@ import io.swagger.v3.oas.annotations.info.Info;
 @OpenAPIDefinition(info = @Info(
         title = "API de A3Getafe",
         version = "SNAPSHOT",
-        description = "API REST para consultar, crear, actualizar y borrar gatos registrados en PostgreSQL"))
+        description = "API REST para gestionar la adopción de gatos de la protectora A3G"))
     
 public class Application {
 

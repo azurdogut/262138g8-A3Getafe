@@ -1,9 +1,11 @@
 package com.web.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 @Entity
@@ -32,7 +34,7 @@ public class Cat {
   @Schema(description = "Fotografía del gato", example = "iris.jpg")
   private String imageUrl;
   @NotBlank(message = "El estado de la adopción es obligatorio")
-  @Schema(description = "Estado de la adopción", example = "AVAILABLE = Esperando adopción")
+  @Schema(description = "Estado de la adopción", example = "AVAILABLE")
   private String status;
 
   public Cat(String name, String ageDescription, String description, String imageUrl, String status) {
