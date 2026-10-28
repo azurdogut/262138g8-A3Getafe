@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${cat.name} + ' - A3Getafe'"></title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+    <div class="container">
+        <a class="navbar-brand" href="/">🐱 A3Getafe</a>
+        <div class="navbar-nav ms-auto">
+            <a class="nav-link" href="/cats">Volver al catálogo</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container" style="max-width: 700px;">
+    <div class="card shadow-sm p-4">
+        <h1 class="fw-bold" th:text="${cat.name}">Nombre del gato</h1>
+        <p class="text-muted fs-5" th:text="'Edad: ' + ${cat.ageDescription}">Edad</p>
+        <hr>
+        <p class="fs-5"><strong>Sobre mí:</strong></p>
+        <p class="fs-6" th:text="${cat.description}">Descripción detallada...</p>
+
+        <p><strong>Estado de adopción:</strong>
+            <span class="badge"
+                  th:classappend="${cat.status == 'AVAILABLE'} ? 'bg-success' : (${cat.status == 'RESERVED'} ? 'bg-warning text-dark' : 'bg-secondary')"
+                  th:text="${cat.status == 'AVAILABLE'} ? 'ESPERANDO ADOPCIÓN' : (${cat.status == 'RESERVED'} ? 'YA TENGO CASA!' : ${cat.status})">
+                Estado
+            </span>
+        </p>
+        <div class="mt-4" th:if="${cat.status == 'AVAILABLE'}">
+            <a th:href="@{/adopt/{id}(id=${cat.id})}" class="btn btn-success btn-lg w-100">¡Quiero adoptar a este gato!</a>
+        </div>
+        <div class="mt-4" th:unless="${cat.status == 'AVAILABLE'}">
+            <button class="btn btn-secondary btn-lg w-100" disabled>No disponible para adopción actualmente</button>
+        </div>
+    </div>
+</div>
+</body>
+</html>
